@@ -1,21 +1,14 @@
-CC ?= gcc
-CFLAGS_common ?= -O0 -Wall -std=gnu99
+CC = gcc
+CFLAGS = -O0 -Wall
+EXECUTABLE = main_optimal
 
-EXEC = phonebook_orig phonebook_opt
-all: $(EXEC)
 
-SRCS_common = main.c
+default: phonebook.o
+	$(CC) $(CFLAGS) phonebook.o smaz.c main_optimal.c -o main_optimal
 
-phonebook_orig: $(SRCS_common) phonebook_orig.c phonebook_orig.h
-	$(CC) $(CFLAGS_common) -DIMPL="\"$@.h\"" -o $@ \
-		$(SRCS_common) $@.c
-
-phonebook_opt: $(SRCS_common) phonebook_opt.c phonebook_opt.h
-	$(CC) $(CFLAGS_common) -DIMPL="\"$@.h\"" -o $@ \
-		$(SRCS_common) $@.c
-
-run: $(EXEC)
-	watch -d -t ./phonebook_orig
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
-	$(RM) $(EXEC) *.o perf.*
+	rm -f $(EXECUTABLE) *.o perf.*
+
